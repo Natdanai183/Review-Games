@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LevelUp Review</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: 
+                linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+                url("BG.png") 
+                no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            color: #fff;
+        }
+        
+        .container {
+            max-width: 2650px;
+            margin: 0 auto;
+            padding: 20px 30px;
+        }
+
+        .music-player {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 15px 20px;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            min-width: 300px;
+        }
+
+        .play-pause-btn {
+            background: linear-gradient(45deg, #ff4081, #ff1744);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .play-pause-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(255, 64, 129, 0.4);
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .volume-icon {
+            color: #fff;
+            font-size: 16px;
+            width: 20px;
+        }
+
+        .volume-slider {
+            flex: 1;
+            height: 5px;
+            border-radius: 5px;
+            background: #333;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #ff4081;
+            cursor: pointer;
+        }
+
+        .volume-slider::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #ff4081;
+            cursor: pointer;
+            border: none;
+        }
+
+        .now-playing {
+            color: #fff;
+            font-size: 12px;
+            opacity: 0.8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 120px;
+        }
+
+        .header {
+            text-align: center;
+            margin: 50px 0;
+        }
+
+        .main-title {
+            font-size: 4rem;
+            font-weight: 700;
+            color: #ffeb3b;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .content {
+            background: 
+                linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)),
+                url("your-image.jpg") no-repeat center center;
+            background-size: cover;
+            border-radius: 80px;
+            padding: 60px 80px;
+            margin: 20px 10px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(15px);
+            min-height: 1300px;
+            max-width: 99%;
+            width: 100%;
+            color: #333;
+        }
+
+        .content-second {
+            background: linear-gradient + gradient สีม่วงฟ้า
+            margin-top: 40px (เว้นระยะจาก content แรก)
+            border: 3px solid (เพิ่มขอบสี)
+        }
+
+        .page-content {
+            display: none;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            color: #1976d2;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .game-layout {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+            margin: 40px 0;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .game-image-section {
+            flex: 0 0 400px;
+        }
+
+        .game-display-image {
+            width: 100%;
+            height: 650px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .game-video-section {
+            flex: 0 0 800px;
+            padding: 0 20px;
+        }
+
+        .game-video {
+            width: 100%;
+            height: 440px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .game-description-section {
+            flex: 1;
+            padding-left: 20px;
+        }
+
+        .game-title {
+            font-size: 1.8rem;
+            color: #1976d2;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .game-rating {
+            color: #ff9800;
+            font-size: 1.3rem;
+            margin: 15px 0;
+            font-weight: 600;
+        }
+
+        .game-description-section p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .game-image {
+            width: 150px;
+            height: 200px;
+            border-radius: 10px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .game-info {
+            flex: 1;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .navigation {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .nav-button {
+            background: linear-gradient(45deg, #2196f3, #1976d2);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            margin: 0 5px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 50px;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+        }
+
+        .nav-button.active {
+            background: linear-gradient(45deg, #ff5722, #f44336);
+            transform: scale(1.1);
+        }
+
+        .welcome-text {
+            text-align: center;
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 40px;
+        }
+
+        .homepage-gallery {
+            position: relative;
+            width: 100%;
+            height: 1320px;
+            overflow: hidden;
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            margin: 40px 0;
+        }
+
+        .gallery-container {
+            display: flex;
+            width: 1100%;
+            height: 100%;
+            transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .gallery-slide {
+            width: 9.09%;
+            height: 100%;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 25px;
+        }
+
+        .slide-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            color: white;
+            padding: 60px 40px 40px;
+            text-align: center;
+        }
+
+        .slide-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.9);
+        }
+
+        .slide-description {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
+        }
+
+        .gallery-indicators {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .indicator {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.6);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .indicator.active {
+            background: #ffeb3b;
+            transform: scale(1.3);
+            border-color: #ffeb3b;
+            box-shadow: 0 0 15px rgba(255, 235, 59, 0.6);
+        }
+
+        .scroll-hint {
+            text-align: center;
+            margin-top: 30px;
+            color: #777;
+            font-size: 1.1rem;
+            animation: fadeInOut 2s infinite;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .slide-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: rgba(0,0,0,0.7);
+            padding: 30px 40px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            max-width: 80%;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            .content {
+                margin: 20px 5px;
+                padding: 30px 25px;
+                max-width: 98%;
+            }
+
+            .main-title {
+                font-size: 2.5rem;
+            }
+            
+            .nav-button {
+                padding: 10px 15px;
+                font-size: 1rem;
+                margin: 5px 2px;
+            }
+
+            .game-layout {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .game-image-section,
+            .game-description-section {
+                flex: none;
+            }
+
+            .game-display-image,
+            .game-video {
+                height: 280px;
+            }
+
+            .game-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .game-image {
+                width: 120px;
+                height: 160px;
+                margin: 0 auto 15px;
+            }
+
+            .music-player {
+                top: 10px;
+                right: 10px;
+                min-width: 250px;
+                padding: 10px 15px;
+            }
+
+            .play-pause-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+            }
+
+            .now-playing {
+                max-width: 80px;
+            }
+
+            .homepage-gallery {
+                height: 700px;
+            }
+
+            .slide-title {
+                font-size: 1.8rem;
+            }
+
+            .slide-description {
+                font-size: 1rem;
+            }
+
+            .slide-overlay {
+                padding: 30px 20px 20px;
+            }
+
+            .gallery-indicators {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .indicator {
+                width: 12px;
+                height: 12px;
+            }
+            
+            .scroll-hint {
+            text-align: center;
+            margin-top: 30px;
+            color: #777;
+            font-size: 1.1rem;
+            animation: fadeInOut 2s infinite;
+            }
+
+            .featured-games-section {
+            margin-top: 50px;
+            text-align: center;
+            }
+
+            @media (max-width: 768px) {
+            }
+
+            .gallery-slide {
+                transition: transform 0.3s ease;
+                cursor: pointer !important;
+            }
+
+            .gallery-slide:hover {
+                transform: scale(1.02);
+                filter: brightness(1.1);
+            }
+
+            .gallery-slide:hover .slide-overlay {
+                background: linear-gradient(transparent, rgba(0,0,0,0.95));
+            }
+
+            .gallery-slide:hover .slide-title {
+                color: #ffeb3b;
+                text-shadow: 3px 3px 8px rgba(255, 235, 59, 0.5);
+            }
+
+            .gallery-slide::after {
+                content: '🎮 คลิกเพื่อดูรายละเอียด';
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                background: rgba(0, 0, 0, 0.8);
+                color: white;
+                padding: 8px 15px;
+                border-radius: 20px;
+                font-size: 0.9rem;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                backdrop-filter: blur(5px);
+            }
+
+            .gallery-slide:hover::after {
+                opacity: 1;
+            }
+
+            @media (max-width: 768px) {
+                .gallery-slide::after {
+                    content: '👆 แตะเพื่อดู';
+                    font-size: 0.8rem;
+                    padding: 6px 12px;
+                    top: 15px;
+                    right: 15px;
+                }
+            }
+
+.home-nav-button {
+    background: linear-gradient(45deg, #4caf50, #2e7d32) !important;
+    font-size: 1.2rem;
+    min-width: 60px;
+}
+
+.home-nav-button:hover {
+    background: linear-gradient(45deg, #66bb6a, #388e3c) !important;
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.5);
+}
+
+.home-nav-button.active {
+    background: linear-gradient(45deg, #66bb6a, #388e3c) !important;
+}
+
+@media (max-width: 768px) {
+    .home-nav-button {
+        font-size: 1rem;
+        min-width: 50px;
+        padding: 10px 15px;
+    }
+}
+        }
+    </style>
+</head>
+<body>
+    
+    
+    <div class="music-player">
+        <button class="play-pause-btn" id="playPauseBtn" onclick="toggleMusic()">
+            ▶️
+        </button>
+        <div class="volume-control">
+            <span class="volume-icon">🔊</span>
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50" onchange="changeVolume()">
+        </div>
+        <div class="now-playing" id="nowPlaying">Background Music</div>
+    </div>
+
+   <audio id="backgroundMusic" loop preload="auto">
+    <source src="sound game 2.wav" type="audio/wav">
+</audio>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="main-title">LEVELUP REVIEW</h1>
+        </div>
+
+        <div class="content">
+            <div id="page1" class="page-content active">
+                <h2 class="page-title">GAME</h2>
+                <div class="welcome-text">
+                    <p>ยินดีต้อนรับสู่เว็บไซต์รีวิวเกม!</p>
+                    <p>ที่นี่คุณจะพบกับรีวิวเกมที่น่าสนใจ หลากหลายแนว หลายหลาก</p>
+                    <p>เลือกหน้าที่ต้องการดูจากปุ่มด้านล่าง</p>           
+                </div>
+
+                <div class="homepage-gallery" id="galleryContainer">
+                    <div class="gallery-container" id="gallerySlider">
+                        <div class="gallery-slide">
+                            <img src="slbg.jpg" alt="Spider-Man Game" class="gallery-image">
+                            <div class="slide-overlay">
+                                <div class="slide-title">Marvel's Spider-Man</div>
+                                <div class="slide-description">Games / Genre / Gameplay Mode / Story</div>
+                            </div>
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="edll.jpg" alt="Elden Ring Game" class="gallery-image">
+                            <div class="slide-overlay">
+                                <div class="slide-title">Elden Ring</div>
+                                <div class="slide-description">Elden Ring / Genres / Adventure / Story</div>
+                            </div>
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="atg.jpg" alt="GTA V Game" class="gallery-image">
+                            <div class="slide-overlay">
+                                <div class="slide-title">Grand Theft Auto V</div>
+                                <div class="slide-description">Grand Theft Auto V / Genres / Open World / Role Play</div>
+                            </div>
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="del.jpg" alt="Minecraft Game" class="gallery-image">
+                            <div class="slide-overlay">
+                                <div class="slide-title">Delta focre</div>
+                                <div class="slide-description">First-person shooter (FPS) / tactical shooter / military</div>
+                            </div>
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="FFF.jpg" alt="Forza Horizon Game" class="gallery-image">
+                            <div class="slide-overlay">
+                                <div class="slide-title">Forza Horizon 5</div>
+                                <div class="slide-description">Racing / Compete / Simulation</div>
+                            </div>
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="CR.png" alt="The Crew 2" class="gallery-image">
+                            <div class="slide-overlay">
+                                <div class="slide-title">The Crew 2</div>
+                                <div class="slide-description">The Crew 2 / Genres / Car Raccing / Compete</div>
+                            </div>
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="cof.jpg" alt="Call Of Duty Modern Warfare" class="gallery-image">
+                            <div class="slide-overlay">
+                                <div class="slide-title">Call Of Duty Modern Warfare</div>
+                                <div class="slide-description">Call of Duty: Modern Warfare / Campaign / FPS / Multiplayer</div>
+                            </div>
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="vvlo.jpg" alt="Valorant" class="gallery-image">
+                            <div class="slide-overlay">
+                                <div class="slide-title">Valorant</div>
+                                <div class="slide-description">FPS / Strategy / Multiplayer / Competitive</div>
+                            </div>
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="GGG.jpg" alt="Ghost Of Tsushima" class="gallery-image">
+                            <div class="slide-overlay">
+                                <div class="slide-title">Ghost Of Tsushima</div>
+                                <div class="slide-description">Action / Story / Open World / Adventure</div>
+                            </div>
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="CCCC.png" alt="Cyberpunk 2077" class="gallery-image">
+                            <div class="slide-overlay">
+                                <div class="slide-title">Cyberpunk 2077</div>
+                                <div class="slide-description">Battle Royale / FPS / Team-based</div>
+                            </div>
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="HHW.jpg" alt="Hogwarts Legacy" class="gallery-image">
+                            <div class="slide-overlay">
+                                <div class="slide-title">Hogwarts Legacy</div>
+                                <div class="slide-description">RPG / Fantasy / Magic</div>
+                            </div>
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="RSD.jpg" alt="Resident Evil 4" class="gallery-image">
+                            <div class="slide-overlay">
+                                <div class="slide-title">Resident Evil 4</div>
+                                <div class="slide-description">Action RPG / Soulslike  / Third-Person Perspective</div>
+                            </div>
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="wk.jpg" alt="Black Myth: Wukong" class="gallery-image">
+                            <div class="slide-overlay">
+                                <div class="slide-title">Black Myth: Wukong</div>
+                                <div class="slide-description">Action RPG / Soulslike  / Third-Person</div>
+                            </div>
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="HMMM.jpg" alt="Black Myth: Wukong" class="gallery-image">
+                            <div class="slide-overlay">
+                                <div class="slide-title">Hit Man 3</div>
+                                <div class="slide-description">Stealth Action / Assassination Sandbox Game  / Focusing On Strategic Planning</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="gallery-indicators" id="galleryIndicators">
+                        <div class="indicator active" onclick="goToSlide(0)"></div>
+                        <div class="indicator" onclick="goToSlide(1)"></div>
+                        <div class="indicator" onclick="goToSlide(2)"></div>
+                        <div class="indicator" onclick="goToSlide(3)"></div>
+                        <div class="indicator" onclick="goToSlide(4)"></div>
+                        <div class="indicator" onclick="goToSlide(5)"></div>
+                        <div class="indicator" onclick="goToSlide(6)"></div>
+                        <div class="indicator" onclick="goToSlide(7)"></div>
+                        <div class="indicator" onclick="goToSlide(8)"></div>
+                        <div class="indicator" onclick="goToSlide(9)"></div>
+                        <div class="indicator" onclick="goToSlide(10)"></div>
+                        <div class="indicator" onclick="goToSlide(11)"></div>
+                        <div class="indicator" onclick="goToSlide(12)"></div>
+                        <div class="indicator" onclick="goToSlide(13)"></div>
+                    </div>
+                </div>
+            </div>
+
+            
+
+            <div id="page2" class="page-content">
+                <h2 class="page-title">ACTION-ADVENTURE</h2>
+                <div class="game-layout">
+                    <div class="game-image-section">
+                        <img src="spi.jpg" alt="Action Game 1" class="game-display-image">
+                    </div>
+                    <div class="game-video-section">
+                        <video controls class="game-video">
+                            <source src="sa.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="game-description-section">
+                        <div class="game-title">Marvel's Spider-Man 2</div>
+                        <div class="game-rating">⭐⭐⭐⭐⭐ 10/10</div>
+                        <p>Marvel's Spider-Man 2 เกมแอ็กชันผจญภัยโลกเปิดที่ผู้เล่นสวมบท ปีเตอร์ ปาร์คเกอร์ และ ไมล์ส โมราเลส สลับกันต่อสู้และสำรวจนิวยอร์ก ซิตี้ ภาคนี้ต้องเผชิญหน้ากับวายร้ายใหม่อย่าง คราเวน เดอะ ฮันเตอร์ และ เวนอม พร้อมทั้งรับมือกับผลกระทบของชุดซิมไบโอตที่เปลี่ยนพฤติกรรมของปีเตอร์ เนื้อเรื่องเข้มข้นด้วยมิตรภาพ ความเสียสละ และการต่อสู้เพื่อปกป้องเมืองจากภัยครั้งใหญ่ที่สุดเท่าที่เคยเจอ</p>
+                        <p>Picture By : Pinterest</p>
+                        <p>Video By : Playstation</p>
+                    </div>
+                </div>
+                <div class="game-layout">
+                    <div class="game-image-section">
+                        <img src="GGHH.jpg" alt="Action Game 1" class="game-display-image">
+                    </div>
+                    <div class="game-video-section">
+                        <video controls class="game-video">
+                            <source src="GGGGGG.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="game-description-section">
+                        <div class="game-title">Ghost of Tsushima</div>
+                        <div class="game-rating">⭐⭐⭐⭐⭐ 10/10</div>
+                        <p>Ghost of Tsushima เป็นเกมแอ็กชันผจญภัยที่เล่าเรื่องของ จิน ซาไก (Jin Sakai) ซามูไรหนุ่มในสมัยญี่ปุ่นยุคคามาคุระ ปีค.ศ. 1274 เกาะสึชิมะถูกกองทัพมองโกลบุกยึด จินรอดชีวิตจากการรบครั้งแรก และตระหนักว่ากฎเกณฑ์แบบซามูไรอาจไม่พอที่จะปกป้องบ้านเกิด เขาจึงเริ่มใช้วิธีการรบแบบลอบเร้นและกลยุทธ์นอกเหนือเกียรติซามูไร เพื่อช่วยชาวบ้านและปลดปล่อยเกาะสึชิมะจากการยึดครองของมองโกล</p>
+                        <p>Picture By : Pinterest</p>
+                        <p>Video By : Playstation</p>
+                    </div>
+                </div>
+                <div class="game-layout">
+                    <div class="game-image-section">
+                        <img src="HMH.jpg" alt="Action Game 2" class="game-display-image">
+                    </div>
+                    <div class="game-video-section">
+                        <video controls class="game-video">
+                            <source src="HT3.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="game-description-section">
+                        <div class="game-title">Hit Man 3</div>
+                        <div class="game-rating">⭐⭐⭐⭐⭐ 9/10</div>
+                        <p>Hitman 3 เกมลอบเร้น (Stealth) ผู้เล่นรับบทเป็น Agent 47 นักฆ่ามืออาชีพ ทำภารกิจสังหารเป้าหมายในสถานที่ต่าง ๆ ทั่วโลก โดยใช้การวางแผน ปลอมตัว และอาวุธหลากหลายแบบเพื่อทำงานให้สำเร็จอย่างแนบเนียน</p>
+                        <p>Picture By : Pinterest</p>
+                        <p>Video By : Playstation</p>
+                    </div>
+                </div>
+                <div class="game-layout">
+                    <div class="game-image-section">
+                        <img src="gta.jpg" alt="Action Game 1" class="game-display-image">
+                    </div>
+                    <div class="game-video-section">
+                        <video controls class="game-video">
+                            <source src="GGTA.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="game-description-section">
+                        <div class="game-title">Grand Theft Auto V (GTA 5)</div>
+                        <div class="game-rating">⭐⭐⭐⭐⭐ 10/10</div>
+                        <p>เล่าเรื่องของ สามตัวเอก — ไมเคิล (อดีตโจรปล้นธนาคารที่เกษียณแล้ว), แฟรงคลิน (หนุ่มนักต้มตุ๋นที่อยากไต่เต้าชีวิต), และเทรเวอร์ (อาชญากรสุดบ้าคลั่ง) ทั้งสามถูกดึงเข้าสู่เหตุการณ์ปล้นครั้งใหญ่ การหักหลัง และความขัดแย้งกับแก๊ง องค์กรอาชญากรรม และหน่วยงานรัฐบาลใต้ดิน ผู้เล่นจะได้สลับควบคุมตัวละครทั้งสามเพื่อทำภารกิจปล้น, หลบหนี และเอาชีวิตรอดในเมืองสมมติ ลอสซานโตส และพื้นที่รอบ ๆ</p>
+                        <p>Picture By : Pinterest</p>
+                        <p>Video By : Rockstar Game </p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="page3" class="page-content">
+                <h2 class="page-title">ACTION ROLE-PLAYING (RPG)</h2>
+                <div class="game-layout">
+                    <div class="game-image-section">
+                        <img src="HWWW.jpg" alt="Adventure Game 1" class="game-display-image">
+                    </div>
+                    <div class="game-video-section">
+                        <video controls class="game-video">
+                            <source src="HHHW.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="game-description-section">
+                        <div class="game-title">Hogwarts Legacy</div>
+                        <div class="game-rating">⭐⭐⭐⭐⭐ 9.8/10</div>
+                        <p>เกมแอ็กชัน RPG โลกเปิด ผู้เล่นสร้างตัวละครนักเรียนฮอกวอตส์ในยุค 1800 สำรวจโรงเรียนและโลกเวทมนตร์ ฝึกคาถา ปรุงยาวิเศษ และเผชิญการผจญภัยที่เกี่ยวพันกับความลับโบราณที่อาจเปลี่ยนแปลงโลกเวทมนตร์ตลอดไป</p>
+                        <p>Picture By : Pinterest</p>
+                        <p>Video By : Playstation</p>
+                    </div>
+                </div>
+                <div class="game-layout">
+                    <div class="game-image-section">
+                        <img src="cyber.jpg" alt="Adventure Game 2" class="game-display-image">
+                    </div>
+                    <div class="game-video-section">
+                        <video controls class="game-video">
+                            <source src="CBPP.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="game-description-section">
+                        <div class="game-title">Cyberpunk 2077</div>
+                        <div class="game-rating">⭐⭐⭐⭐⭐ 9.6/10</div>
+                        <p>ผู้เล่นรับบทเป็น V ทหารรับจ้างในเมืองอนาคต Night City ที่เต็มไปด้วยเทคโนโลยีไซเบอร์และอาชญากรรม เรื่องเริ่มขึ้นเมื่อ V ได้ติดตั้งชิปปริศนาที่บรรจุจิตสำนึกของ จอห์นนี ซิลเวอร์แฮนด์ (ร็อกเกอร์และกบฏในตำนาน) แต่ชิปกำลังค่อย ๆ เขียนทับจิตใจของ V ผู้เล่นต้องหาทางรอดจากชะตากรรมนี้ พร้อมเลือกเส้นทางและพันธมิตร ซึ่งจะกำหนดอนาคตของทั้ง V และ Night City</p>
+                        <p>Picture By : Pinterest</p>
+                        <p>Video By : IGN</p>
+                    </div>
+                </div>
+                <div class="game-layout">
+                    <div class="game-image-section">
+                        <img src="Elden.jpg" alt="Adventure Game 1" class="game-display-image">
+                    </div>
+                    <div class="game-video-section">
+                        <video controls class="game-video">
+                            <source src="EELL.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="game-description-section">
+                        <div class="game-title">Elden Ring</div>
+                        <div class="game-rating">⭐⭐⭐⭐⭐ 9.8/10</div>
+                        <p>เกมแอ็กชัน RPG โลกเปิด ที่ผู้เล่นรับบทเป็น Tarnished นักรบผู้ถูกเนรเทศ กลับมายังดินแดน The Lands Between เพื่อรวบรวมเศษแหวน Elden Ring และฟื้นฟูอำนาจของ Elden Lord ผู้เล่นต้องสำรวจโลกกว้าง ต่อสู้กับศัตรูและบอสสุดโหด พร้อมเลือกเส้นทางและชะตากรรมของตนเอง</p>
+                        <p>Picture By : Pinterest</p>
+                        <p>Video By : BANDAI NAMCO Europe</p>
+                    </div>
+                </div>
+                <div class="game-layout">
+                    <div class="game-image-section">
+                        <img src="WWWK.jpg" alt="Adventure Game 1" class="game-display-image">
+                    </div>
+                    <div class="game-video-section">
+                        <video controls class="game-video">
+                            <source src="BMWK.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="game-description-section">
+                        <div class="game-title">Black Myth: Wukong</div>
+                        <div class="game-rating">⭐⭐⭐⭐⭐ 9.8/10</div>
+                        <p>เกมแอ็กชัน RPG ที่ได้รับแรงบันดาลใจจากนิยายไซอิ๋ว ผู้เล่นสวมบท เห้งเจีย (ซุนหงอคง) ต่อสู้กับศัตรูและสัตว์ประหลาดในโลกแฟนตาซีจีน ใช้ทักษะการต่อสู้และพลังวิเศษหลากหลายรูปแบบ</p>
+                        <p>Picture By : Pinterest</p>
+                        <p>Video By : Playstation</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="page4" class="page-content">
+                <h2 class="page-title">SHOOTER-FPS</h2>
+                <div class="game-layout">
+                    <div class="game-image-section">
+                        <img src="CODT.jpg" alt="Sports Game 1" class="game-display-image">
+                    </div>
+                    <div class="game-video-section">
+                        <video controls class="game-video">
+                            <source src="vdoco.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="game-description-section">
+                        <div class="game-title">Call Of Duty Modern Warfare</div>
+                        <div class="game-rating">⭐⭐⭐⭐☆ 8.2/10</div>
+                        <p>เกมฟุตบอลล่าสุด กราฟิกสมจริง ระบบการเล่นที่ปรับปรุงใหม่ โหมด Career Mode ที่น่าสนใจ Ultimate Team ที่มีความหลากหลาย</p>
+                        <p>Picture By : Pinterest</p>
+                        <p>Video By : Playstation</p>
+                    </div>
+                </div>
+                <div class="game-layout">
+                    <div class="game-image-section">
+                        <img src="DTF.jpg" alt="Sports Game 2" class="game-display-image">
+                    </div>
+                    <div class="game-video-section">
+                        <video controls class="game-video">
+                            <source src="DTFFF.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="game-description-section">
+                        <div class="game-title">Delta focre</div>
+                        <div class="game-rating">⭐⭐⭐⭐☆ 8.0/10</div>
+                        <p>เกมบาสเกตบอลที่สมจริงที่สุด โหมด MyCareer ที่น่าติดตาม กราฟิกระดับ Next-Gen MyTeam ที่สนุกไม่รู้จบ</p>
+                        <p>Picture By : Pinterest</p>
+                        <p>Video By : IGN</p>
+                    </div>
+                </div>
+                <div class="game-layout">
+                    <div class="game-image-section">
+                        <img src="vvv.jpg" alt="Adventure Game 1" class="game-display-image">
+                    </div>
+                    <div class="game-video-section">
+                        <video controls class="game-video">
+                            <source src="valov.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="game-description-section">
+                        <div class="game-title">Valorant</div>
+                        <div class="game-rating">⭐⭐⭐⭐⭐ 9.8/10</div>
+                        <p>เกมแอ็กชัน RPG โลกเปิด ผู้เล่นสร้างตัวละครนักเรียนฮอกวอตส์ในยุค 1800 สำรวจโรงเรียนและโลกเวทมนตร์ ฝึกคาถา ปรุงยาวิเศษ และเผชิญการผจญภัยที่เกี่ยวพันกับความลับโบราณที่อาจเปลี่ยนแปลงโลกเวทมนตร์ตลอดไป</p>
+                        <p>Picture By : Pinterest</p>
+                        <p>Video By : Valorant</p>
+                    </div>
+                </div>
+                <div class="game-layout">
+                    <div class="game-image-section">
+                        <img src="BTF.jpg" alt="Adventure Game 1" class="game-display-image">
+                    </div>
+                    <div class="game-video-section">
+                        <video controls class="game-video">
+                            <source src="BTTTTT.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="game-description-section">
+                        <div class="game-title">Battlefield™ 6</div>
+                        <div class="game-rating">⭐⭐⭐⭐⭐ 9.8/10</div>
+                        <p>เกมแอ็กชัน RPG โลกเปิด ผู้เล่นสร้างตัวละครนักเรียนฮอกวอตส์ในยุค 1800 สำรวจโรงเรียนและโลกเวทมนตร์ ฝึกคาถา ปรุงยาวิเศษ และเผชิญการผจญภัยที่เกี่ยวพันกับความลับโบราณที่อาจเปลี่ยนแปลงโลกเวทมนตร์ตลอดไป</p>
+                        <p>Picture By : Pinterest</p>
+                        <p>Video By : IGN</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="page5" class="page-content">
+                <h2 class="page-title">RACING-COMPETE</h2>
+                <div class="game-layout">
+                    <div class="game-image-section">
+                        <img src="F11.jpg" alt="Strategy Game 1" class="game-display-image">
+                    </div>
+                    <div class="game-video-section">
+                        <video controls class="game-video">
+                            <source src="fff1.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="game-description-section">
+                        <div class="game-title">F1® 25</div>
+                        <div class="game-rating">⭐⭐⭐⭐⭐ 9.2/10</div>
+                        <p>เกมจำลองการแข่งขันฟอร์มูลาวันที่พัฒนาให้สมจริงทั้งฟิสิกส์รถ, สนามแข่ง และกติกาการแข่งขัน อ้างอิงข้อมูลจากฤดูกาลจริงของ F1 ผู้เล่นสามารถสร้างนักแข่งของตัวเองในโหมดอาชีพ, เล่นในโหมดทีม (My Team) หรือแข่งออนไลน์กับผู้เล่นทั่วโลก เน้นทักษะการขับ, กลยุทธ์การเข้าพิต, และการปรับแต่งรถเพื่อให้ได้เปรียบในการแข่งขัน</p>
+                        <p>Picture By : Pinterest</p>
+                        <p>Video By : Playstation</p>
+                    </div>
+                </div>
+                <div class="game-layout">
+                    <div class="game-image-section">
+                        <img src="car.jpg" alt="Strategy Game 2" class="game-display-image">
+                    </div>
+                    <div class="game-video-section">
+                        <video controls class="game-video">
+                            <source src="fz.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="game-description-section">
+                        <div class="game-title">Forza Horizon 5</div>
+                        <div class="game-rating">⭐⭐⭐⭐⭐ 9.0/10</div>
+                        <p>เกมแข่งรถโลกเปิดที่มีฉากในประเทศเม็กซิโก ผสมผสานสนามแข่งกับภูมิประเทศหลากหลาย ทั้งทะเลทราย ป่าฝน ภูเขาไฟ และชายฝั่ง ผู้เล่นเป็นส่วนหนึ่งของ “Horizon Festival” งานเทศกาลรถที่รวมทั้งการแข่งขัน, การท้าทาย, และการโชว์รถ จุดเด่นคือกราฟิกสวยสมจริงและการเล่นที่เปิดกว้างให้ผู้เล่นเลือกเส้นทางเอง</p>
+                        <p>Picture By : Pinterest</p>
+                        <p>Video By : Playstation</p>
+                    </div>
+                </div>
+                <div class="game-layout">
+                    <div class="game-image-section">
+                        <img src="carr1.jpg" alt="Strategy Game 1" class="game-display-image">
+                    </div>
+                    <div class="game-video-section">
+                        <video controls class="game-video">
+                            <source src="TCC.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="game-description-section">
+                        <div class="game-title">The Crew 2</div>
+                        <div class="game-rating">⭐⭐⭐⭐⭐ 9.2/10</div>
+                        <p>เกมแข่งรถโลกเปิดที่ให้ผู้เล่นขับได้ทั้งรถยนต์, มอเตอร์ไซค์, เรือสปีดโบ๊ต และเครื่องบิน ข้ามสลับยานพาหนะได้แบบทันที แผนที่ครอบคลุมสหรัฐอเมริกาทั้งประเทศ (ในสเกลย่อ) ให้สำรวจทั้งในเมืองและพื้นที่ธรรมชาติ มาพร้อมโหมดแข่งขันหลายประเภท เช่น แข่งบนถนน, ออฟโรด, การแข่งเรือ และการบินผาดโผน</p>
+                        <p>Picture By : Pinterest</p>
+                        <p>Video By : GameSpot Trailers</p>
+                    </div>
+                </div><div class="game-layout">
+                    <div class="game-image-section">
+                        <img src="Carx.jpg" alt="Strategy Game 1" class="game-display-image">
+                    </div>
+                    <div class="game-video-section">
+                        <video controls class="game-video">
+                            <source src="CARRX.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="game-description-section">
+                        <div class="game-title">CarX Street</div>
+                        <div class="game-rating">⭐⭐⭐⭐⭐ 9.2/10</div>
+                        <p>เกมแข่งรถโลกเปิดที่เน้นความสมจริงของฟิสิกส์การขับ โดยเฉพาะการดริฟต์ ผู้เล่นสามารถขับสำรวจเมืองในเวลากลางวันและกลางคืน เข้าร่วมการแข่งขันบนถนนกับแก๊งต่าง ๆ หรือทำภารกิจเพื่อปลดล็อกรถและชิ้นส่วนใหม่ ๆ จุดเด่นคือระบบการปรับแต่งรถที่ละเอียด ตั้งแต่เครื่องยนต์ไปจนถึงชุดแต่งภายนอก</p>
+                        <p>Picture By : Pinterest</p>
+                        <p>Video By : CarX Technologies</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="page6" class="page-content">
+                <h2 class="page-title">SURVIVAL-SURVIVAL HORROR</h2>
+                <div class="game-layout">
+                    <div class="game-image-section">
+                        <img src="Resident Evil 4.jpg" alt="Indie Game 1" class="game-display-image">
+                    </div>
+                    <div class="game-video-section">
+                        <video controls class="game-video">
+                            <source src="Res.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="game-description-section">
+                        <div class="game-title">Resident Evil 4</div>
+                        <div class="game-rating">⭐⭐⭐⭐⭐ 9.4/10</div>
+                        <p>เนื้อเรื่องติดตาม Leon S. Kennedy เจ้าหน้าที่รัฐบาลสหรัฐฯ ที่ได้รับภารกิจไปช่วยลูกสาวประธานาธิบดีซึ่งถูกลักพาตัวไปยังหมู่บ้านห่างไกลในสเปน ที่นั่นเขาพบว่าชาวบ้านติดเชื้อปรสิตลึกลับชื่อ “Las Plagas” ทำให้พวกเขากลายเป็นศัตรูดุร้าย ลีออนต้องต่อสู้กับฝูงศัตรู, เผชิญหน้าบอสสุดโหด, แก้ปริศนา และเอาชีวิตรอดจากการไล่ล่า ขณะค่อย ๆ เปิดเผยความจริงเบื้องหลังองค์กรที่อยู่เบื้องหลังเหตุการณ์นี้</p>
+                        <p>Picture By : Pinterest</p>
+                        <p>Video By : Playstation</p>
+                    </div>
+                </div>
+                <div class="game-layout">
+                    <div class="game-image-section">
+                        <img src="slh2.jpg" alt="Indie Game 1" class="game-display-image">
+                    </div>
+                    <div class="game-video-section">
+                        <video controls class="game-video">
+                            <source src="silent.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="game-description-section">
+                        <div class="game-title">Silent Hill 2</div>
+                        <div class="game-rating">⭐⭐⭐⭐⭐ 9.4/10</div>
+                        <p>เนื้อเรื่องติดตาม James Sunderland ชายที่ได้รับจดหมายจากภรรยาของเขา แมรี่ — ทั้งที่เธอเสียชีวิตไปแล้ว — ชวนให้เขามาพบที่เมืองเงียบลึกลับ Silent Hill เมื่อมาถึง เขาพบว่าทั้งเมืองถูกปกคลุมด้วยหมอกหนา เต็มไปด้วยสิ่งมีชีวิตประหลาดและบรรยากาศกดดัน เจมส์ต้องสำรวจเมือง ค้นหาความจริงเบื้องหลังจดหมาย และเผชิญหน้ากับความลับดำมืดในใจของตัวเอง เกมเน้นความสยองขวัญเชิงจิตวิทยา เนื้อเรื่องตีความได้หลายแบบ และสร้างบรรยากาศหลอนที่ไม่พึ่งพาแค่ความตกใจ (Jump scare)</p>
+                        <p>Picture By : Pinterest</p>
+                        <p>Video By : SILENT HILL (Official)</p>
+                    </div>
+                </div>
+                <div class="game-layout">
+                    <div class="game-image-section">
+                        <img src="DL.jpg" alt="Indie Game 1" class="game-display-image">
+                    </div>
+                    <div class="game-video-section">
+                        <video controls class="game-video">
+                            <source src="dll.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="game-description-section">
+                        <div class="game-title">Dying Light 2 Stay Human</div>
+                        <div class="game-rating">⭐⭐⭐⭐⭐ 9.4/10</div>
+                        <p>ในโลกหลังวันสิ้นโลก ผู้เล่นรับบทเป็น Aiden Caldwell ที่ตื่นขึ้นมาในเมืองใหญ่ The City ซึ่งถูกแบ่งแยกโดยกลุ่มอำนาจต่าง ๆ ทั้งนักรบผู้แข็งแกร่งและกลุ่มโจร Aiden ต้องค้นหาอดีตของตัวเองและใช้พลังพิเศษที่มีเพื่อช่วยกำหนดอนาคตของเมืองนี้ การตัดสินใจของผู้เล่นจะส่งผลต่อชะตากรรมของเมืองและผู้คนในนั้น ระหว่างการต่อสู้กับซอมบี้และศัตรูมนุษย์</p>
+                        <p>Picture By : Pinterest</p>
+                        <p>Video By : Dying Light</p>
+                    </div>
+                </div>
+                <div class="game-layout">
+                    <div class="game-image-section">
+                        <img src="TLOF.jpg" alt="Indie Game 2" class="game-display-image">
+                    </div>
+                    <div class="game-video-section">
+                        <video controls class="game-video">
+                            <source src="Last.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="game-description-section">
+                        <div class="game-title">The Last of Us™ Part II</div>
+                        <div class="game-rating">⭐⭐⭐⭐⭐ 9.3/10</div>
+                        <p>เนื้อเรื่องเล่าถึง เอลลี่ (Ellie) หญิงสาวที่ออกเดินทางเพื่อล้างแค้นหลังจากเหตุการณ์สะเทือนใจในเมืองแจ็คสัน เกมเน้นการเอาตัวรอดในโลกที่ถูกทำลายจากการแพร่ระบาดของเชื้อราอันน่ากลัว พร้อมการต่อสู้แบบแอบแฝง ยิงปืน และการสำรวจ เนื้อเรื่องมีความเข้มข้นทางอารมณ์ และสะท้อนเรื่องของความเกลียดชัง การสูญเสีย และการให้อภัย</p>
+                        <p>Picture By : Pinterest</p>
+                        <p>Video By : Playstation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation">
+        <button class="nav-button home-nav-button" onclick="goHome()">🏠</button>
+        <button class="nav-button active" onclick="showPage(1)">1</button>
+        <button class="nav-button" onclick="showPage(2)">2</button>
+        <button class="nav-button" onclick="showPage(3)">3</button>
+        <button class="nav-button" onclick="showPage(4)">4</button>
+        <button class="nav-button" onclick="showPage(5)">5</button>
+        <button class="nav-button" onclick="showPage(6)">6</button>
+    </div>
+    </div>
+
+    <script>
+        let isPlaying = false;
+        const audio = document.getElementById('backgroundMusic');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const volumeSlider = document.getElementById('volumeSlider');
+
+        audio.volume = 0.5;
+
+        let currentSlide = 0;
+        const totalSlides = 14;
+        let isScrolling = false;
+
+        function goToSlide(slideIndex) {
+            currentSlide = slideIndex;
+            const slider = document.getElementById('gallerySlider');
+            const indicators = document.querySelectorAll('.indicator');
+            
+            slider.style.transform = `translateX(-${slideIndex * 9.09}%)`;
+            
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === slideIndex);
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            goToSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            goToSlide(currentSlide);
+        }
+
+        function handleGalleryScroll(e) {
+            const currentPage = document.querySelector('.page-content.active');
+            if (currentPage.id !== 'page1') return;
+
+            e.preventDefault();
+            
+            if (isScrolling) return;
+            isScrolling = true;
+
+            if (e.deltaY < 0) {
+                prevSlide();
+            } else {
+                nextSlide();
+            }
+            setTimeout(() => {
+                isScrolling = false;
+            }, 800);
+        }
+
+        document.getElementById('galleryContainer').addEventListener('wheel', handleGalleryScroll);
+
+        setInterval(() => {
+            const currentPage = document.querySelector('.page-content.active');
+            if (currentPage.id === 'page1') {
+                nextSlide();
+            }
+        }, 7000);
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                playPauseBtn.innerHTML = '▶️';
+                isPlaying = false;
+                document.getElementById('nowPlaying').textContent = 'Music Paused';
+            } else {
+                const playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        playPauseBtn.innerHTML = '⏸️';
+                        isPlaying = true;
+                        document.getElementById('nowPlaying').textContent = 'Playing Music';
+                    }).catch(error => {
+                        console.log('Playback failed:', error);
+                        document.getElementById('nowPlaying').textContent = 'Click to Play';
+                        alert('กรุณากดปุ่มเล่นเพลงอีกครั้ง เบราว์เซอร์ต้องการการคลิกจากผู้ใช้เพื่อเล่นเสียง');
+                    });
+                }
+            }
+        }
+
+        function changeVolume() {
+            const volume = volumeSlider.value / 100;
+            audio.volume = volume;
+        }
+
+        audio.addEventListener('loadstart', function() {
+            console.log('Audio loading started');
+            document.getElementById('nowPlaying').textContent = 'Loading Music...';
+        });
+
+        audio.addEventListener('canplay', function() {
+            console.log('Audio can play');
+            document.getElementById('nowPlaying').textContent = 'Ready to Play';
+        });
+
+        audio.addEventListener('error', function(e) {
+            console.log('Audio error:', e);
+            document.getElementById('nowPlaying').textContent = 'Audio Error - Check URL';
+        });
+
+        audio.addEventListener('ended', function() {
+            isPlaying = false;
+            playPauseBtn.innerHTML = '▶️';
+            document.getElementById('nowPlaying').textContent = 'Music Ended';
+        });
+
+        function showPage(pageNumber) {
+            const allPages = document.querySelectorAll('.page-content');
+            allPages.forEach(page => page.classList.remove('active'));
+            document.getElementById('page' + pageNumber).classList.add('active');
+            const allButtons = document.querySelectorAll('.nav-button');
+            allButtons.forEach(button => button.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.getElementById('galleryContainer').addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.getElementById('galleryContainer').addEventListener('touchend', e => {
+            const currentPage = document.querySelector('.page-content.active');
+            if (currentPage.id !== 'page1') return;
+            
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const swipeDistance = touchEndX - touchStartX;
+            
+            if (Math.abs(swipeDistance) > swipeThreshold) {
+                if (swipeDistance > 0) {
+                    prevSlide();
+                } else {
+                    nextSlide();
+                }
+            }
+        }
+        function handleSlideClick(slideIndex) {
+    const slideToPageMap = {
+        0: 2,
+        1: 3,
+        2: 2,
+        3: 4,
+        4: 5,
+        5: 5,
+        6: 4,
+        7: 4,
+        8: 2,
+        9: 3,
+        10: 3,
+        11: 6,
+        12: 3,
+        13: 2
+    };
+
+    const targetPage = slideToPageMap[slideIndex];
+    if (targetPage) {
+        showPage(targetPage);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const slides = document.querySelectorAll('.gallery-slide');
+    slides.forEach((slide, index) => {
+        slide.style.cursor = 'pointer';
+        slide.addEventListener('click', () => handleSlideClick(index));
+    });
+});
+function goHome() {
+    showPage(1);
+}
+
+function showPage(pageNumber) {
+    const allPages = document.querySelectorAll('.page-content');
+    allPages.forEach(page => page.classList.remove('active'));
+    document.getElementById('page' + pageNumber).classList.add('active');
+    
+    const allButtons = document.querySelectorAll('.nav-button');
+    allButtons.forEach(button => button.classList.remove('active'));
+    
+    if (pageNumber === 1) {
+        document.querySelector('.home-nav-button').classList.add('active');
+        document.querySelector('.nav-button:nth-child(2)').classList.add('active');
+    } else {
+        const targetButton = document.querySelector(`.nav-button:nth-child(${pageNumber + 1})`);
+        if (targetButton) {
+            targetButton.classList.add('active');
+        }
+    }
+}
+    </script>
+</body>
+</html>
