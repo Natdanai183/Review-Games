@@ -548,6 +548,45 @@
                 opacity: 1;
             }
 
+            .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .college-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            }
+
+            .college-menu.active {
+                display: flex;
+            }
+
+            .college-menu li {
+                margin: 5px 0;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .college-logo {
+                font-size: 1.4rem;
+            }
+        }
+
             @media (max-width: 768px) {
                 .gallery-slide::after {
                     content: '👆 แตะเพื่อดู';
@@ -1314,5 +1353,6 @@ function showPage(pageNumber) {
 </body>
 
 </html>
+
 
 
